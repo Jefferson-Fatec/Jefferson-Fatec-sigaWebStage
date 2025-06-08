@@ -85,6 +85,8 @@ app.get('/api/usuarios', async (req, res) => {
 
         console.log(`[${new Date().toISOString()}] Consulta /api/usuarios bem-sucedida. ${result.recordset.length} registros encontrados.`);
         res.json(result.recordset);
+        // MELHORIA 3: Log de Resposta Enviada**
+        console.log(`[${new Date().toISOString()}] Resposta 200 (OK) enviada para GET /api/usuarios.`);
 
     } catch (err) {
         // NOVO LOG: Erro detalhado na conexão ou consulta ao DB
@@ -93,6 +95,8 @@ app.get('/api/usuarios', async (req, res) => {
             console.error(`[${new Date().toISOString()}] Possível erro de autenticação/senha no banco de dados para GET /api/usuarios.`);
         }
         res.status(500).send('Erro no servidor ao consultar usuários.');
+         // **MELHORIA 3: Log de Resposta de Erro Enviada**
+        console.log(`[${new Date().toISOString()}] Resposta 500 (Erro Interno) enviada para GET /api/usuarios.`);
     } finally {
         // NOVO LOG: Informa que a conexão está sendo fechada
         console.log(`[${new Date().toISOString()}] Fechando conexão com o banco de dados para /api/usuarios.`);
@@ -148,9 +152,14 @@ app.post('/api/cadastrarUsuario', async (req, res) => {
         if (result.rowsAffected && result.rowsAffected[0] > 0) {
             console.log(`[${new Date().toISOString()}] Usuário "${username}" cadastrado com sucesso.`);
             res.status(201).json({ message: "Usuário cadastrado com sucesso!" });
+            // MELHORIA 3: Log de Resposta Enviada
+            console.log(`[${new Date().toISOString()}] Resposta 201 (Created) enviada para POST /api/cadastrarUsuario.`);
+       
         } else {
             console.error(`[${new Date().toISOString()}] Erro ao cadastrar usuário "${username}": nenhuma linha afetada.`);
             res.status(500).json({ message: "Erro ao cadastrar usuário: nenhuma linha afetada." });
+             console.log(`[${new Date().toISOString()}] Resposta 500 (Erro Interno) enviada para POST /api/cadastrarUsuario.`);
+       
         }
 
     } catch (err) {
@@ -160,6 +169,9 @@ app.post('/api/cadastrarUsuario', async (req, res) => {
              console.error(`[${new Date().toISOString()}] Possível erro de autenticação/senha no banco de dados para POST /api/cadastrarUsuario.`);
         }
         res.status(500).json({ message: "Erro interno do servidor.", error: err.message });
+         // **MELHORIA 3: Log de Resposta de Erro Enviada**
+        console.log(`[${new Date().toISOString()}] Resposta 500 (Erro Interno) enviada para POST /api/cadastrarUsuario.`);
+  
     } finally {
         // NOVO LOG: Informa que a conexão está sendo fechada
         console.log(`[${new Date().toISOString()}] Fechando conexão com o banco de dados para POST /api/cadastrarUsuario.`);
@@ -167,6 +179,11 @@ app.post('/api/cadastrarUsuario', async (req, res) => {
     }
 });
 
+
+// app.put('/api/usuarios/:id', async (req, res) => { }
+// app.delete('/api/usuarios/:id', async (req, res) => { }
+// app.get('/api/usuarios/:id', async (req, res) => { }
+//
 // --- 6. Iniciando o Servidor ---
 
 app.listen(port, () => {
